@@ -1,0 +1,6 @@
+Changes
+Makefile.PL
+MANIFEST
+README
+t/Set-Select.t
+lib/Set/Select.pm
