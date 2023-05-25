@@ -91,19 +91,21 @@ expression which is anchored at both ends (i.e. C</^$expression$/>).
 
 A Venn diagram (matching the example above) that may or may not make the intent clearer:
 
-         .---.
-        /  1  \
-       |       |
-    .--+--. .--+--.
-   /   | 3 X 5 |   \
-  |    |  / \  |    |
-  |  2  \/ 7 \/  4  |
-  |     |`---'|     |
-  |      \ 6 /      |
-   \      \ /      /
-    `------^------'
 
-Every distinct region of the Venn-diagram is addressable with an unique
+       Elements:                 Selectors:
+         .---.                     .---.
+        /  1  \                   / 100 \
+       |       |                 |       |
+    .--+--. .--+--.           .--+--. .--+--.
+   /   | 3 X 5 |   \         /   |110X101|   \
+  |    |  / \  |    |       |    |  / \  |    |
+  |  2  \/ 7 \/  4  |       | 010 \/111\/ 001 |
+  |     |`---'|     |       |     |`---'|     |
+  |      \ 6 /      |       |      \011/      |
+   \      \ /      /         \      \ /      /
+    `------^------'           `------^------'
+
+Every distinct region of the Venn-diagram is addressable with a unique
 selector string.
 
 =head1 CONSTRUCTOR
@@ -117,7 +119,7 @@ The constructor croaks on non-arrayref arguments.
 
 =head2 select($string)
 
-Expects a single string argument. In the simplest case this string contain
+Expects a single string argument. In the simplest case this string contains
 only the literal C<0> and C<1> characters, and it should be as long as
 the number of input sets. However, the string is actually interpreted as
 a regular expression, so any regular expression can be used that matches
@@ -134,7 +136,9 @@ and C<1>s), corresponding to distinct, non-empty regions of the Venn-diagram.
 The values are array references, that is, the subsets that match the selector
 string (the key).
 
-=back
+In effect, this method enumerates all non-empty subsets: all elements in
+the input arrays are categorized into one of the subsets, and each original
+element appears once in exactly one of the subsets.
 
 =head1 RATIONALE
 
@@ -149,8 +153,8 @@ and just writing ad hoc solutions to each little problem becomes infeasible.
 
 I think these selector strings as the primary (and only) user interface
 are better than the possible alternatives that come to mind:
-a verbose, ad hoc query language would have to be explained at length in the documentation,
-tested carefully in the source, and parsed painfully at runtime,
+a verbose, ad hoc query language would have to be explained at length in the
+documentation, tested carefully in the source, and parsed painfully at runtime,
 while a forest of arbitrarily named methods to select this or that subset
 would bloat the code needlessly and make the module harder to use.
 
